@@ -1,10 +1,8 @@
 function [Zn] = LIB_MSC(X, lambda, mu, rho, p,beta,gamma)
-    % lambda: λ
     V = size(X,2);
     n = size(X{1,1},2);
     mu_max = 1e8;
     iter_max = 30;
-    %% initialization
     C = zeros(n,n);
     L = cell(V,1);R = cell(V,1);
     Z = cell(V,1);J = cell(V,1);
