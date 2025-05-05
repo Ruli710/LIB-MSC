@@ -63,7 +63,6 @@ end
     mu = min(rho*mu,mu_max);
         % 更新C_IB
         numerator = mu * C + Q_IB + (X{1}' * X{1}) * C; 
-        % 假设X{1}为基准视图
         for v = 2:V
             numerator = numerator - (C - Z{v});
         end
