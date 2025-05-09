@@ -15,9 +15,9 @@ for v = 1:V
     Q1{v} = zeros(size(X{v}));Q2{v} = zeros(n,n);Q3{v} = zeros(n,n);
     tempX{v} = X{v}'*X{v};
 end
-    % 信息瓶颈变量初始化
-    C_IB = zeros(n, n);   % 信息瓶颈约束下的潜在表示
-    Q_IB = zeros(n, n);   % Lagrange乘子
+    % Information bottleneck variable initialization
+    C_IB = zeros(n, n);   % Potential representation under information bottleneck constraints
+    Q_IB = zeros(n, n);   % Lagrange multipliers
     oldstop=zeros(1,V);
     for iter = 1:iter_max
         tempC = zeros(n,n);
@@ -61,19 +61,19 @@ end
         Q3{v} = Q3{v}+mu*(Z{v}-J{v});
     end
     mu = min(rho*mu,mu_max);
-        % 更新C_IB
+        % Update C_IB
         numerator = mu * C + Q_IB + (X{1}' * X{1}) * C; 
         for v = 2:V
             numerator = numerator - (C - Z{v});
         end
         C_IB = numerator / (mu  + (V-1));
-        % 更新Q_IB
+        % Update Q_IB
         Q_IB = Q_IB + mu * (C - C_IB);
         
-        %% --- 更新共享核心矩阵C---
+        %% --- Updated shared core matrix C---
         [UUU, sigma, VVV] = svd(C_IB - Q_IB/mu, 'econ');
         sigma = diag(sigma);
-        xi = spw(sigma, lambda/(V*mu), p); % GST阈值
+        xi = spw(sigma, lambda/(V*mu), p); % GST threshold
         C = UUU * diag(xi) * VVV';
         
    % stop
